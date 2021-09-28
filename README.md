@@ -8,4 +8,4 @@ $ ./install.sh # this installs the completion engine to $HOME/.local/share/bash-
 # follow instructions to automatically load the completion engine
 
 DEMO:
-[![asciicast](https://asciinema.org/a/Noyd3SMGezF2unNKkVZUjgYxz.svg)](https://asciinema.org/a/Noyd3SMGezF2unNKkVZUjgYxz)
+![Animated gif demo](gc__completion.gif)
