@@ -1,0 +1,227 @@
+# golem
+# tag: main 2021-09-28T20:55:32+00:00
+# golem completion engine
+# author: krunch3r76 (https://github.com/krunch3r76)
+# license: poetic/GPL 3
+#
+# install to $HOME/.local/share/bash-completion/completions/golem
+
+subcommands=(golemsp yagna run stop settings  set show  status db  vacuum  id list lock unlock create update drop export  app-key  version check  activity  payment accounts fund init exit transfer  invoice  drivers service)
+
+_gc__completion_golemsp_context_help() {
+	# local: words
+	# echo "${words[@]}"
+	# DOCSTRING: provides completion logic for golemsp
+	bashcmd="${words[@]} -h"
+	echo -e "\n-+-+-+-+-+-+-+-+-+-+-+-+-+-+"
+	$bashcmd
+	echo -n "${PS1@P}${words[@]}"
+}
+
+_gc__completion_yagna_context_help() {
+	# local: words
+	# DOCSTRING: provides completion logic for yagna
+	bashcmd="${words[@]} -h"; echo -e "\n-+-+-+-+-+-+-+-+-+-+-+-+-+-+"; $bashcmd
+	echo -en "$ ${words[@]}"
+}
+
+_gc__completion_golemsp() {
+	ULTIMATE=$1
+	if [[ "$ULTIMATE" == "golemsp" ]]; then
+		options=(run stop settings help)
+	elif [[ "$ULTIMATE" == "run" ]]; then
+		options=(--subnet --account --payment-network --log-dir)
+	elif [[ "$ULTIMATE" == "settings" ]]; then
+		options=(set show)
+	elif [[ "$ULTIMATE" == "set" ]]; then # implies 'settings' was penultimate
+		options=(--node-name --cores --memory --disk --starting-fee --env-per-hour --cpu-per-hour --acount --payment-network)
+	fi
+
+	COMPREPLY=($(compgen -W "${options[*]}" \"${COMP_WORDS[${COMP_CWORD}]}\"))
+}
+
+_GC__COMPLETION_UNUSED_COMMON_FLAGS() {
+	# local: words
+	# check if --json in words
+	OUTPUT="--version"
+	if [[ ! "${words[*]}" =~ "--json" ]]; then
+		OUTPUT="$OUTPUT --json"
+	fi
+	if [[ ! "$words[*]" =~ "--datadir" ]]; then
+		OUTPUT="$OUTPUT --datadir"
+	fi
+	if [[ ! "$words[*]" =~ "--gsb-url" ]]; then
+		OUTPUT="$OUTPUT --gsb-url" 
+	fi
+	OUTPUT="$OUTPUT help"
+	echo $OUTPUT
+}
+
+_GC__COMPLETION_COMMON_PAYMENT_OPTIONS() {
+	OUTPUT=""
+	if [[ ! "${words[*]}" =~ "--account" ]]; then
+		OUTPUT="$OUTPUT --account"
+	fi
+	if [[ ! "${words[*]}" =~ "--driver" ]]; then
+		OUTPUT="$OUTPUT --driver"
+	fi
+	if [[ ! "${words[*]}" =~ "--network" ]]; then
+		OUTPUT="$OUTPUT --network"
+	fi
+	echo $OUTPUT
+}
+
+_gc__completion_yagna() {
+	ULTIMATE=$1
+	PENULTIMATE=
+	if [[ $2 ]]; then
+		PENULTIMATE=$2
+	fi
+	
+	options=("$(_GC__COMPLETION_UNUSED_COMMON_FLAGS)")
+	if [[ $ULTIMATE == "yagna" ]]; then
+		options+=(db id app-key activity payment service)
+	elif [[ $ULTIMATE == "db" ]]; then
+		options+=(vacuum)
+	elif [[ $ULTIMATE == "vacuum" ]]; then
+		options+=(--force)
+	# id
+	elif [[ $ULTIMATE == "id" ]]; then
+		options+=(list show lock unlock create update drop export)
+	elif [[ $ULTIMATE == "list" && $PENULTIMATE == "id" ]]; then
+		NOOP=
+	elif [[ $ULTIMATE == "show" && $PENULTIMATE == "id" ]]; then
+		NOOP=
+	elif [[ $ULTIMATE == "lock" ]]; then
+		options+=(--new-password)
+	elif [[ $ULTIMATE == "unlock" ]]; then
+		NOOP=
+	elif [[ $ULTIMATE == "create" && $PENULTIMATE == "id" ]]; then
+		options+=(--no-password --from-keystore)
+	elif [[ $ULTIMATE == "update" ]]; then
+		options+=(--set-default --alias)
+	elif [[ $ULTIMATE == "drop" && $PENULTIMATE == "id" ]]; then
+		NOOP=
+	elif [[ $ULTIMATE == "export" ]]; then
+		options+=(--file-path)
+	# app-key
+	elif [[ $ULTIMATE == "app-key" ]]; then
+		options+=(create drop list)
+	elif [[ $ULTIMATE == "create" && $PENULTIMATE == "app-key" ]]; then
+		options+=(--role --id)
+	elif [[ $ULTIMATE == "drop" && $PENULTIMATE == "app-key" ]]; then
+		options+=(--id)
+	elif [[ $ULTIMATE == "list" && $PENULTIMATE == "app-key" ]]; then
+		options+=(--page --per-page)
+	# version
+	elif [[ $ULTIMATE == "version" ]]; then
+		options+=(show check)
+	elif [[ $ULTIMATE == "show" && $PENULTIMATE == "version" ]]; then
+		NOOP=
+	elif [[ $ULTIMATE == "check" ]]; then
+		NOOP=
+	# activity
+	elif [[ $ULTIMATE == "activity" ]]; then
+		options+=(status)
+	elif [[ $ULTIMATE == "status" ]]; then
+		options+=(--id)
+	# payment
+	elif [[ $ULTIMATE == "payment" ]]; then
+		options+=("$(_GC__COMPLETION_COMMON_PAYMENT_OPTIONS)")
+		options+=(accounts fund init status exit transfer invoice drivers)
+	elif [[ $ULTIMATE == "accounts" ]]; then
+		options+=("$(_GC__COMPLETION_COMMON_PAYMENT_OPTIONS)")
+		NOOP=
+	elif [[ $ULTIMATE == "fund" ]]; then
+		options+=("$(_GC__COMPLETION_COMMON_PAYMENT_OPTIONS)")
+		options+=(--account --driver --network)
+	elif [[ $ULTIMATE == "init" ]]; then
+		options+=("$(_GC__COMPLETION_COMMON_PAYMENT_OPTIONS)")
+		options+=(--sender --receiver) 
+	elif [[ $ULTIMATE == "status" ]]; then
+		options+=("$(_GC__COMPLETION_COMMON_PAYMENT_OPTIONS)")
+		NOOP=
+	elif [[ $ULTIMATE == "exit" ]]; then
+		options+=("$(_GC__COMPLETION_COMMON_PAYMENT_OPTIONS)")
+		NOOP=
+	elif [[ $ULTIMATE == "transfer" ]]; then
+		options+=("$(_GC__COMPLETION_COMMON_PAYMENT_OPTIONS)")
+		options+=(--to-address --amount)
+	elif [[ $ULTIMATE == "invoice" ]]; then
+		options+=(status)
+	elif [[ $ULTIMATE == "status" && $PENULTIMATE == "payment" ]]; then
+		options+=(--last)
+	elif [[ $ULTIMATE == "drivers" ]]; then
+		NOOP=
+	# service
+	elif [[ $ULTIMATE == "service" ]]; then
+		options+=(run)
+	elif [[ $ULTIMATE == "run" ]]; then
+		options+=(--disable-metrics-push --debug --api-url --metrics-push-url --max-rest-timeout --log-dir)
+	fi
+
+	COMPREPLY=($(compgen -W "${options[*]}" \"${COMP_WORDS[${COMP_CWORD}]}\"))
+}
+
+
+
+#locals: words
+#inputs: $1 rstart
+#outputs: IFS delimited list containing ULTIMATE and PENULTIMATE if found
+_gc__completion__rfind_subcommands() {
+	ULTIMATE=
+	PENULTIMATE=
+	END=${#words[@]}
+	LAST=$(( $END - 1 ))
+	LAST_INDEX=
+	for RINDEX in $(seq $LAST -1 0); do
+		if [[ "${subcommands[*]}" =~ (^| )${words[$RINDEX]}($| ) ]]; then
+			ULTIMATE=${words[$RINDEX]}
+			LAST_INDEX=$RINDEX
+			break
+		fi
+	done
+	if [[ $LAST_INDEX > 0 ]]; then
+		LAST_INDEX=$(( $LAST_INDEX - 1 ))
+		for RINDEX in $(seq $LAST_INDEX -1 0); do
+			if [[ "${subcommands[*]}" =~ (^| )${words[$RINDEX]}($| ) ]]; then
+				PENULTIMATE=${words[$RINDEX]}
+				break
+			fi
+		done
+	fi
+	echo $ULTIMATE $PENULTIMATE
+}
+
+
+
+# notes: ULTIMATE refers to the last occurring subcommand, PENULTIMATE is the preceding subcommand/command
+_gc__completion() { 
+	options=() # clear options in case resourcing from same session
+	local words # review
+	words=("${COMP_WORDS[@]}")
+	# DOCSTRING: handle golemsp, yagna specific logic
+	if [[ ! $2 ]]; then # cursor over empty space
+		# ask completion engine what executable was being called (stored at $1)
+		if [[ "$1" == "golemsp" ]]; then
+			_gc__completion_golemsp_context_help
+		elif [[ "$1" == "yagna" ]]; then
+			_gc__completion_yagna_context_help
+		fi
+	else # cursor in word
+		ULTIMATES=($(_gc__completion__rfind_subcommands))
+		ULTIMATE=${ULTIMATES[0]}
+		if [[ ${#ULTIMATES[*]} > 1 ]]; then
+			PENULTIMATE=${ULTIMATES[1]}
+		else
+			PENULTIMATE=
+		fi
+		if [[ "$1" == "golemsp" ]]; then
+			_gc__completion_golemsp $ULTIMATE
+		elif [[ "$1" == "yagna" ]]; then
+			_gc__completion_yagna $ULTIMATE $PENULTIMATE
+		fi
+	fi
+} &&
+complete -F _gc__completion golemsp yagna
+
