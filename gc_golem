@@ -22,7 +22,7 @@ _gc__completion_yagna_context_help() {
 	# local: words
 	# DOCSTRING: provides completion logic for yagna
 	bashcmd="${words[@]} -h"; echo -e "\n-+-+-+-+-+-+-+-+-+-+-+-+-+-+"; $bashcmd
-	echo -en "$ ${words[@]}"
+	echo -n "${PS1@P}${words[@]}"
 }
 
 _gc__completion_golemsp() {
