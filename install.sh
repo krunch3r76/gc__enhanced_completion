@@ -38,7 +38,7 @@ if [[ -e $TARGET_PATH ]]; then
 fi
 
 
-GREPPED=$( $(egrep ^source $HOME/.bashrc | grep $INSTALL_FILE) 2>/dev/null)
+GREPPED=$(egrep ^source $HOME/.bashrc | grep $INSTALL_FILE 2>/dev/null)
 
 set noclobber
 # TAG=$(grep "# tag:" $INSTALL_FILE | cut -f2 -d ":" | sed -E 's/^[[:space:]]*([^[:space:]])[[:space:]]*$/\1/' )
@@ -49,7 +49,7 @@ ALREADY_INSTALLED=0
 if [[ -e $TARGET_PATH && ($MD5_LOCAL == $MD5_TARGET) ]]; then
 	ECHO_COLOR $BOLD "YES" 0
 	echo -n "...no update required"
-	if [[ GREPPED ]]; then
+	if [[ ! GREPPED ]]; then
 		ECHO_COLOR $YELLOWBOLD " BUT NOT AUTO-LOADED"
 	else
 		echo ""
