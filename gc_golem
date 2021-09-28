@@ -28,7 +28,7 @@ _gc__completion_yagna_context_help() {
 _gc__completion_golemsp() {
 	ULTIMATE=$1
 	if [[ "$ULTIMATE" == "golemsp" ]]; then
-		options=(run stop settings help)
+		options=(run stop settings status help)
 	elif [[ "$ULTIMATE" == "run" ]]; then
 		options=(--subnet --account --payment-network --log-dir)
 	elif [[ "$ULTIMATE" == "settings" ]]; then
