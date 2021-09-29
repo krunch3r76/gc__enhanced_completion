@@ -11,6 +11,7 @@ fi
 
 # install -m644 gc_golem -D /home/krunch3r/.local/share/bash-completion/completions/gc_golem
 GREEN="\e[0;32m";YELLOW="\e[0;93m";BOLD="\e[1m";RED="\e[0;31m";YELLOWBOLD="$YELLOW$BOLD"
+BLINK="\e\033[5m"
 ECHO_COLOR() {
 	COLOR=$1
 	MSG=$2
@@ -56,7 +57,8 @@ if [[ -e $TARGET_PATH && ($MD5_LOCAL == $MD5_TARGET) ]]; then
 	fi
 	ALREADY_INSTALLED=1
 else
-	ECHO_COLOR $BOLD "NO" 0
+	# ECHO_COLOR $BOLD "NO" 0
+	ECHO_COLOR "$BLINK$BOLD" "NO" 0
 	echo " or update required"
 fi
 
