@@ -3,6 +3,7 @@
 # installs bash completions to $HOME/.local
 # and updates .bashrc
 
+set -o noclobber
 if [[ $# != 0 ]]; then
 	echo "Usage: $0"
 	exit 1
@@ -40,7 +41,6 @@ fi
 
 GREPPED=$(egrep ^source $HOME/.bashrc | grep $INSTALL_FILE 2>/dev/null)
 
-set noclobber
 # TAG=$(grep "# tag:" $INSTALL_FILE | cut -f2 -d ":" | sed -E 's/^[[:space:]]*([^[:space:]])[[:space:]]*$/\1/' )
 TAG=$(grep "# tag:" $INSTALL_FILE | sed -E 's/^[^:]*[:][[:space:]]*(.*)[[:space:]]*$/\1/' )
 echo "installing target version '$TAG'"
