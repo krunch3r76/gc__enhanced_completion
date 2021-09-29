@@ -6,7 +6,7 @@ never again be at a loss in the middle of the command line as to what options or
 this program is designed to work with requestor and provider installations of the Golem software suite. for more information about the Golem Network, please visit: https://www.golem.network
 
 # BACKGROUND
-The problem gc__bash_completion solves is providing pertinent, concise and cogent help from the command-line. Currently, Golem provides a yagna tabbed completion engine. Until it becomes part of the standard install, it can be added via the command `yagna complete bash 2>&1 >.local/share/bash-completion/completions/yagna`. Note that gc__bash_completion is designed to work with and will not break Golem's in-house completion script.
+The problem gc__bash_completion solves is providing pertinent, concise and cogent help from the command-line. Currently, Golem provides a yagna tabbed completion engine. Until it becomes part of the standard install, it can be added via the command `yagna complete bash 2>&1 >$HOME/.local/share/bash-completion/completions/yagna`. Note that gc__bash_completion is designed to work with and will not break Golem's in-house completion script.
 
 But the in-house tabbed completion lists all possible subcommands and arguments and without the contextual help this provides. This makes it difficult for someone new to the interface to readily identify desirable completions. gc__bash_completion aims to declutter and enhance the autocompletion experience by making suggestions pertinent to the current command or argument and providing contextual help otherwise.
 
