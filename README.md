@@ -29,6 +29,15 @@ $ $(set -o noclobber; echo 'source $HOME/.local/share/bash-completion/completion
 # DEMO
 ![Animated gif demo](https://krunch3r76.github.io/gc__bash_completion/gc__completion.gif)
 
+# UPDATE WITH EXISTING CLONED REPO
+currently this project is expected to be stable on the main branch with updates to the engine as they emerge.
+the reader is encouraged to keep an existing cloned repo and update and install periodically. this should not be necessary but if some unexpected behavior occurs, it is recommended to check if an update is available to fix it.
+```
+$ cd gc__bash_completion
+$ git pull # if message does not indicate already up to date, proceed with
+$ ./install.sh
+```
+
 # COMMENTS
 The only changes made to the system after installation are
 1) the file gc_golem is installed to $HOME/.local/share/bash-completion/completions/gc_golem
