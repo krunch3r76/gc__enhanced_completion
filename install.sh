@@ -106,8 +106,9 @@ if [[ ! -z $GREPPED && $ALREADY_INSTALLED == 1 ]]; then
 fi
 if [[ $? == 0 && $NO_CHANGE != 1 ]]; then
 	ECHO_COLOR $YELLOWBOLD "\n---POST INSTALLATION ACTIONS---"
+	ECHO_COLOR $BOLD "the installation was successful, " 0
 	if [[ ! $MODIFIED_BASHRC ]]; then
-		echo "the installation was successful, to activate the completion engine:"
+		echo "to activate the completion engine:"
 		echo "$(ECHO_COLOR $BOLD 1)) $BASHRC_LINE"
 		echo "$(ECHO_COLOR $BOLD 2)) echo '$BASHRC_LINE' >> \$HOME/.bashrc"
 	else

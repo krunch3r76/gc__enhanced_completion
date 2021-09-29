@@ -31,6 +31,7 @@ _gc__completion_golemsp() {
 	unset options
 	if [[ "$ULTIMATE" == "golemsp" || ($ULTIMATE == "set" && $PENULTIMATE == "golemsp") ]]; then
 		# the set, golemsp condition is a kludge to fix non-autocomplete on standalone "set"
+		# next version should implement rfind that skips over the last incomplete word.
 		options=(run stop settings status help)
 	elif [[ "$ULTIMATE" == "run" ]]; then
 		options=(--subnet --account --payment-network --log-dir)
