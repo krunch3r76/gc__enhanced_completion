@@ -11,7 +11,7 @@ subcommands=(golemsp yagna run stop settings  set show  status db  vacuum  id li
 _gc__completion_golemsp_context_help() {
 	# local: words
 	# echo "${words[@]}"
-	# DOCSTRING: provides completion logic for golemsp
+	# DOCSTRING: provides context help for golemsp
 	bashcmd="${words[@]} -h"
 	echo -e "\n-+-+-+-+-+-+-+-+-+-+-+-+-+-+"
 	$bashcmd
@@ -20,20 +20,21 @@ _gc__completion_golemsp_context_help() {
 
 _gc__completion_yagna_context_help() {
 	# local: words
-	# DOCSTRING: provides completion logic for yagna
+	# DOCSTRING: provides context help for yagna
 	bashcmd="${words[@]} -h"; echo -e "\n-+-+-+-+-+-+-+-+-+-+-+-+-+-+"; $bashcmd
 	echo -n "${PS1@P}${words[@]}"
 }
 
 _gc__completion_golemsp() {
 	ULTIMATE=$1
+	PENULTIMATE=$2
 	if [[ "$ULTIMATE" == "golemsp" ]]; then
 		options=(run stop settings status help)
 	elif [[ "$ULTIMATE" == "run" ]]; then
 		options=(--subnet --account --payment-network --log-dir)
 	elif [[ "$ULTIMATE" == "settings" ]]; then
 		options=(set show)
-	elif [[ "$ULTIMATE" == "set" ]]; then # implies 'settings' was penultimate
+	elif [[ "$ULTIMATE" == "set" && $PENULTIMATE == "settings" ]]; then
 		options=(--node-name --cores --memory --disk --starting-fee --env-per-hour --cpu-per-hour --acount --payment-network)
 	fi
 
@@ -217,7 +218,7 @@ _gc__completion() {
 			PENULTIMATE=
 		fi
 		if [[ "$1" == "golemsp" ]]; then
-			_gc__completion_golemsp $ULTIMATE
+			_gc__completion_golemsp $ULTIMATE $PENULTIMATE
 		elif [[ "$1" == "yagna" ]]; then
 			_gc__completion_yagna $ULTIMATE $PENULTIMATE
 		fi
