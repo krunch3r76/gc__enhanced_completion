@@ -98,7 +98,11 @@ else
 	ECHO_COLOR $GREEN "YES"
 fi
 
-if [[ $? == 0 ]]; then
+NO_CHANGE=0
+if [[ ! -z $GREPPED && $ALREADY_INSTALLED == 1 ]]; then
+	NO_CHANGE=1
+fi
+if [[ $? == 0 && $NO_CHANGE != 1 ]]; then
 	ECHO_COLOR $YELLOWBOLD "\n---POST INSTALLATION ACTIONS---"
 	if [[ ! $MODIFIED_BASHRC ]]; then
 		echo "to activate the completion engine:"
@@ -109,5 +113,7 @@ if [[ $? == 0 ]]; then
 		echo "$(ECHO_COLOR $BOLD 1)) $BASHRC_LINE"
 		echo "or $(ECHO_COLOR $BOLD 2)) start a new terminal session"
 	fi
+else
+	ECHO_COLOR $BOLD "The installation was already up to date."
 fi
 
