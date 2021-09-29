@@ -6,8 +6,17 @@ never again be at a loss in the middle of the command line as to what options or
 this program is designed to work with requestor and provider installations of the Golem software suite. for more information about the Golem Network, please visit: https://www.golem.network
 
 # INSTALLATION
-$ ./install.sh # this installs the completion engine to $HOME/.local/share/bash-completion/completions/gc_golem
-#follow instructions to automatically load the completion engine
+## automatic
+$ ./install.sh
+- installs the completion engine to $HOME/.local/share/bash-completion/completions/gc_golem
+- updates .bashrc automatically load the completion engine [optional]
+
+## manual
+```
+$ mkdir -p $HOME/.local/share/bash-completion/completions
+$ cp gc_golem $HOME/.local/share/bash-completion/completions
+$ echo 'source $HOME/.local/share/bash-completion/completions/gc_golem' >> $HOME/.bashrc
+```
 
 # DEMO
 ![Animated gif demo](https://krunch3r76.github.io/gc__bash_completion/gc__completion.gif)
