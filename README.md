@@ -31,7 +31,7 @@ $ $(set -o noclobber; echo 'source $HOME/.local/share/bash-completion/completion
 
 # UPDATE WITH EXISTING CLONED REPO
 currently this project is expected to be stable on the main branch with updates to the engine as they emerge.
-the reader is encouraged to keep an existing cloned repo and update and install periodically. this should not be necessary but if some unexpected behavior occurs, it is recommended to check if an update is available to fix it.
+the reader is encouraged to keep an existing cloned repo and update and install periodically. this should not be necessary inbetween releases but if some unexpected behavior occurs, it is recommended to check if an update is available to fix it.
 ```
 $ cd gc__bash_completion
 $ git pull # if message indicates already up to date it is still okay to run the install script
