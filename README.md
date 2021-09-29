@@ -23,7 +23,7 @@ $ ./install.sh
 ```
 $ mkdir -p $HOME/.local/share/bash-completion/completions
 $ cp gc_golem $HOME/.local/share/bash-completion/completions
-$ echo 'source $HOME/.local/share/bash-completion/completions/gc_golem' >> $HOME/.bashrc
+$ $(set -o noclobber; echo 'source $HOME/.local/share/bash-completion/completions/gc_golem' >> $HOME/.bashrc)
 ```
 
 # DEMO
