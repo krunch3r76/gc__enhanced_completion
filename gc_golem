@@ -29,7 +29,8 @@ _gc__completion_golemsp() {
 	ULTIMATE=$1
 	PENULTIMATE=$2
 	unset options
-	if [[ "$ULTIMATE" == "golemsp" ]]; then
+	if [[ "$ULTIMATE" == "golemsp" || ($ULTIMATE == "set" && $PENULTIMATE == "golemsp") ]]; then
+		# the set, golemsp condition is a kludge to fix non-autocomplete on standalone "set"
 		options=(run stop settings status help)
 	elif [[ "$ULTIMATE" == "run" ]]; then
 		options=(--subnet --account --payment-network --log-dir)
