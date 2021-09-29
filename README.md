@@ -1,5 +1,5 @@
 # gc__bash_completion
-a bash completion engine and context helper for golemsp and yagna
+a bash completion engine **_and_** context helper for golemsp and yagna
 
 never again be at a loss in the middle of the command line as to what options or arguments are available to you when invoking **golemsp** or **yagna**. gc__bash_completion will autocomplete entries at the press of a tab and provide contextual help straight from the command line. and after installing, it works seamlessly in every terminal session!
 
