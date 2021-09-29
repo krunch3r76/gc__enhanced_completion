@@ -10,8 +10,8 @@ this program is designed to work with requestor and provider installations of th
 ```
 $ ./install.sh
 ```
-- installs the completion engine to $HOME/.local/share/bash-completion/completions/gc_golem
-- updates .bashrc automatically load the completion engine [optional]
+- installs the completion engine to $HOME/.local/share/bash-completion/completions/gc_golem (if file is absent or version different)
+- updates .bashrc automatically load the completion engine [optional] if needed
 
 ## manual
 ```
