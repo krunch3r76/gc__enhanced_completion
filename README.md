@@ -8,4 +8,4 @@ $ ./install.sh # this installs the completion engine to $HOME/.local/share/bash-
 #follow instructions to automatically load the completion engine
 
 # DEMO
-![Animated gif demo](gc__completion.gif)
+![Animated gif demo](https://krunch3r76.github.io/gc__bash_completion/gc__completion.gif)
