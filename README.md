@@ -9,3 +9,10 @@ $ ./install.sh # this installs the completion engine to $HOME/.local/share/bash-
 
 # DEMO
 ![Animated gif demo](https://krunch3r76.github.io/gc__bash_completion/gc__completion.gif)
+
+# COMMENTS
+The only changes made to the system after installation are
+1) the file gc_golem is installed to $HOME/.local/share/bash-completion/completions/gc_golem
+2) if requested, a line is added to $HOME/.bashrc to source the file from #1
+
+The program does not in any way alter the original golemsp or yagna installation nor perform any actions on the user's behalf. Neither does it phone home as well.
