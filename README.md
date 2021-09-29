@@ -21,8 +21,8 @@ $ ./install.sh
 
 ### manually install
 ```
-$ mkdir -p $HOME/.local/share/bash-completion/completions
-$ cp gc_golem $HOME/.local/share/bash-completion/completions
+$ mkdir -p $HOME/.local/share/bash-completion/completions/
+$ cp gc_golem $HOME/.local/share/bash-completion/completions/
 $ $(set -o noclobber; echo 'source $HOME/.local/share/bash-completion/completions/gc_golem' >> $HOME/.bashrc)
 ```
 
