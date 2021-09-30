@@ -12,8 +12,8 @@ The problem gc__bash_completion solves is providing detailed help during command
 # INSTALLATION
 ## clone
 ```
-git clone https://github.com/krunch3r76/gc__bash_completion.git
-cd gc__bash_completion.git
+git clone https://github.com/krunch3r76/gc__enhanced_completion.git
+cd gc__enhanced_completion
 ```
 
 ### automatically install/update
@@ -36,7 +36,7 @@ $ $(set -o noclobber; echo 'source $HOME/.local/share/bash-completion/completion
 # UPDATE WITH EXISTING CLONED REPO
 the reader is encouraged to keep an existing cloned repo and update and install periodically. this should not be necessary inbetween releases but if some unexpected behavior occurs, it is recommended to check if an update is available to fix it. additoinally, it should not be necessary also when Golem provides a built in completion engine for golemsp.
 ```
-$ cd gc__bash_completion
+$ cd gc__enhanced_completion
 $ git pull # if message indicates already up to date it is still okay to run the install script
 $ ./install.sh
 ```
