@@ -140,6 +140,5 @@ _gc__completion() {
 	fi
 } && 
 complete -F _gc__completion golemsp yagna
-# complete -o bashdefault -o default -F _gc__completion golemp yagna
 
 
