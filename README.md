@@ -34,7 +34,7 @@ $ git pull && ./install.sh
 ```
 
 # UPDATE WITH EXISTING CLONED REPO
-the reader is encouraged to keep an existing cloned repo and update and install periodically. this should not be necessary inbetween releases but if some unexpected behavior occurs, it is recommended to check if an update is available to fix it. additoinally, it should not be necessary also when Golem provides a built in completion engine for golemsp.
+this should not be necessary inbetween releases once the repo has matured (it is only a couple days in) unless some unexpected behavior occurs, in which case it is recommended to check if an update is available to fix it. but it will be necessary when Golem provides a built in completion engine for golemsp (expected soon).
 ```
 $ cd gc__enhanced_completion
 $ git pull # if message indicates already up to date it is still okay to run the install script
