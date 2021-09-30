@@ -24,7 +24,7 @@ cd gc__enhanced_completion
 $ git pull && ./install.sh
 ```
 - installs the completion engine to $HOME/.local/share/bash-completion/completions/gc_golem (if file is absent or version different)
-- updates .bashrc automatically load the completion engine [optional] if needed
+- updates .bashrc to automatically load the completion engine [optional] if needed
 
 ### manually install
 ```
