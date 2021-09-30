@@ -1,4 +1,4 @@
-# gc__enhanced_bash_completion
+# gc__enhanced_completion
 an enhanced bash completion engine that extends built-in completions by providing contextual help for golemsp and yagna
 
 never again be at a loss in the middle of the command line as to what options or arguments are available to you _and what they mean_ when invoking **golemsp** or **yagna**. gc__bash_completion one-ups bash autocompletion at the press of a tab by providing contextual help straight from the command line. it will work seamlessly in every terminal session and integrate the official yagna completions from the current yagna installation without requiring the user to import them manually!
@@ -6,7 +6,7 @@ never again be at a loss in the middle of the command line as to what options or
 this program is designed to work with requestor and provider installations of the Golem software suite. for more information about the Golem Network, please visit: https://www.golem.network
 
 # BACKGROUND
-The problem gc__bash_completion solves is providing detailed help during command entry at a full stop by printing the help menu for the current subcommand during entry. yagna's builtin completion engine alone will only list possible completions in a given subcommand. gc__bash_completion extends yagna's builtin completion engine by adding contextual help.
+The problem gc__enhanced_completion solves is providing detailed help during command entry at a full stop by printing the help menu for the current subcommand during entry. yagna's builtin completion engine alone will only list possible completions in a given subcommand. gc__bash_completion extends yagna's builtin completion engine by adding contextual help.
 
 
 # INSTALLATION
