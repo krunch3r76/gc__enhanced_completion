@@ -6,7 +6,7 @@
 #
 # install to $HOME/.local/share/bash-completion/completions/golem
 
-#$(yagna complete bash 2>&1 | head -n-1)
+complete -r -o bashdefault -o default -F _yagna yagna 2>/dev/null
 YAGNA_COMPLETION_ENGINE=$(yagna complete bash 2>&1 | head -n-1 | tail -n +2 )
 source /dev/stdin <<<$YAGNA_COMPLETION_ENGINE
 subcommands=(golemsp yagna run stop settings  set show  status db  vacuum  id list lock unlock create update drop export  app-key  version check  activity  payment accounts fund init exit transfer  invoice  drivers service)
@@ -140,6 +140,6 @@ _gc__completion() {
 	fi
 } && 
 complete -F _gc__completion golemsp yagna
-# complete -F _gc__completion -o bashdefault -o default golemp yagna
+# complete -o bashdefault -o default -F _gc__completion golemp yagna
 
 
