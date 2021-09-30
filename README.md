@@ -5,6 +5,9 @@ never again be at a loss in the middle of the command line as to what options or
 
 this program is designed to work with requestor and provider installations of the Golem software suite. for more information about the Golem Network, please visit: https://www.golem.network
 
+# DEMO
+![Animated gif demo](https://krunch3r76.github.io/gc__bash_completion/gc__completion.gif)
+
 # BACKGROUND
 The problem gc__enhanced_completion solves is providing detailed help during command entry at a full stop by printing the help menu for the current subcommand during entry. yagna's builtin completion engine alone will only list possible completions in a given subcommand. gc__bash_completion extends yagna's builtin completion engine by adding contextual help.
 
@@ -29,9 +32,6 @@ $ git pull && ./install.sh
 (gc__enhanced_completion)$ cp gc_golem $HOME/.local/share/bash-completion/completions/
 (gc__enhanced_completion)$ $(set -o noclobber; echo 'source $HOME/.local/share/bash-completion/completions/gc_golem' >> $HOME/.bashrc)
 ```
-
-# DEMO
-![Animated gif demo](https://krunch3r76.github.io/gc__bash_completion/gc__completion.gif)
 
 # UPDATE WITH EXISTING CLONED REPO
 the reader is encouraged to keep an existing cloned repo and update and install periodically. this should not be necessary inbetween releases but if some unexpected behavior occurs, it is recommended to check if an update is available to fix it. additoinally, it should not be necessary also when Golem provides a built in completion engine for golemsp.
