@@ -1,4 +1,4 @@
-# golem
+# gc_golem
 # tag: main 2021-09-30T17:29:28-07:00
 # golem completion engine
 # author: krunch3r76 (https://github.com/krunch3r76)
@@ -9,7 +9,7 @@
 YAGNA_COMPLETION_ENGINE=$(yagna complete bash 2>&1 | head -n-1 )	# store the completion engine script produced by yagna
 complete -r -o bashdefault -o default -F _yagna yagna 2>/dev/null	# clear before reload of yagna official script
 source /dev/stdin <<<$YAGNA_COMPLETION_ENGINE 				# add yagna official completion engine
-gc__subcommands=(golemsp yagna run stop settings	set show) 		# golemsp subcommands manually added
+gc__subcommands=(golemsp yagna run stop settings	set show)	# golemsp subcommands manually added
 
 
 
