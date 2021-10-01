@@ -22,9 +22,10 @@ fi
 
 if [[ $GOLEMSP_SUPPORTED ]]; then
 	source /dev/stdin <<<$GOLEMSP_COMPLETION_ENGINE
+else
+	gc__subcommands=(golemsp yagna run stop settings	set show)	# golemsp subcommands manually added
 fi
 
-gc__subcommands=(golemsp yagna run stop settings	set show)	# golemsp subcommands manually added
 
 
 # INPUT: gc__cwords {global}, COMP_LINE {imported env}
