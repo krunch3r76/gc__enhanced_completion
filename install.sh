@@ -3,13 +3,18 @@
 # installs bash completions to $HOME/.local
 # and updates .bashrc
 
+
+# ensure actions are non destructive
 set -o noclobber
+
+# check command line
 if [[ $# != 0 ]]; then
 	echo "Usage: $0"
 	exit 1
 fi
 
-# install -m644 gc_golem -D /home/krunch3r/.local/share/bash-completion/completions/gc_golem
+
+###########helpers########################
 GREEN="\e[0;32m";YELLOW="\e[0;93m";BOLD="\e[1m";RED="\e[0;31m";YELLOWBOLD="$YELLOW$BOLD"
 BLINK="\e\033[5m"
 ECHO_COLOR() {
@@ -22,48 +27,42 @@ ECHO_COLOR() {
 	echo -ne "${COLOR}${MSG}${NOCOLOR}$END"
 }
 NOCOLOR="\e[0m"
+###########################################
 
-INSTALL_FILE=gc_golem
+SOURCE_FILE=gc_golem
 
-if [[ ! -e $INSTALL_FILE ]]; then
+# ensure there is a file to install
+if [[ ! -e $SOURCE_FILE ]]; then
 	ECHO_COLOR $RED "the script file is not in the directory, so it cannot be installed!"
 	exit
 fi
 
-TARGET_PATH=$HOME/.local/share/bash-completion/completions/$INSTALL_FILE
-INSTALL_CMD="install -m644 $INSTALL_FILE -D $TARGET_PATH"
+SOURCE_VERSION=$(grep "# tag:" $SOURCE_FILE | sed -E 's/^[^:]*[:][[:space:]]*(.*)[[:space:]]*$/\1/' )
+echo "installing target version '$SOURCE_VERSION'"
 
-MD5_LOCAL=$(md5sum $INSTALL_FILE | cut -f1 -d" ")
-MD5_TARGET=
-if [[ -e $TARGET_PATH ]]; then
-	MD5_TARGET=$(md5sum $TARGET_PATH | cut -f1 -d" ")
-fi
+DEST_FILEPATH=$HOME/.local/share/bash-completion/completions/$SOURCE_FILE
 
 
-GREPPED=$(egrep ^source $HOME/.bashrc | grep $INSTALL_FILE 2>/dev/null)
-
-# TAG=$(grep "# tag:" $INSTALL_FILE | cut -f2 -d ":" | sed -E 's/^[[:space:]]*([^[:space:]])[[:space:]]*$/\1/' )
-TAG=$(grep "# tag:" $INSTALL_FILE | sed -E 's/^[^:]*[:][[:space:]]*(.*)[[:space:]]*$/\1/' )
-echo "installing target version '$TAG'"
 echo -n "target version already installed..."
-ALREADY_INSTALLED=0
-if [[ -e $TARGET_PATH && ($MD5_LOCAL == $MD5_TARGET) ]]; then
-	ECHO_COLOR $BOLD "YES" 0
-	echo -n "...no update required"
-	if [[ ! GREPPED ]]; then
-		ECHO_COLOR $YELLOWBOLD " BUT NOT AUTO-LOADED"
-	else
-		echo ""
+if [[ -e $DEST_FILEPATH ]]; then
+	DEST_EXISTS=1
+	MD5_LOCAL=$(md5sum $SOURCE_FILE | cut -f1 -d" ")
+	MD5_TARGET=$(md5sum $DEST_FILEPATH | cut -f1 -d" ")
+	if [[ $MD5_LOCAL == $MD5_TARGET ]]; then
+		SOURCE_SAME_AS_DEST=1
 	fi
-	ALREADY_INSTALLED=1
-else
-	# ECHO_COLOR $BOLD "NO" 0
-	ECHO_COLOR "$BLINK$BOLD" "NO" 0
-	echo " or update required"
 fi
 
-if [[ $ALREADY_INSTALLED == 0 ]]; then
-	echo -n "installing to $TARGET_PATH..."
+if [[ $SOURCE_SAME_AS_DEST == 1 ]]; then
+	ECHO_COLOR $BOLD "YES"
+else
+	ECHO_COLOR $BOLD "...NO"
+	INSTALL_CMD="install -m644 $SOURCE_FILE -D $DEST_FILEPATH"
+fi
+
+
+if [[ ! -v SOURCE_SAME_AS_DEST ]]; then
+	echo -n "installing to $DEST_FILEPATH..."
 	$INSTALL_CMD 2>/dev/null
 	if [[ $? == 0 ]]; then
 		ECHO_COLOR $GREEN "OK"
@@ -74,9 +73,11 @@ if [[ $ALREADY_INSTALLED == 0 ]]; then
 fi
 
 echo -n "bashrc contains source invocation..."
-BASHRC_LINE="source \$HOME/.local/share/bash-completion/completions/$INSTALL_FILE"
-MODIFIED_BASHRC=1  # assumes bashrc already has line to source the file
-if [[ -z $GREPPED ]]; then
+BASHRC_LINE="source \$HOME/.local/share/bash-completion/completions/$SOURCE_FILE"
+
+IS_SOURCED_FROM_BASHRC=$(egrep ^source $HOME/.bashrc | grep $SOURCE_FILE 2>/dev/null)
+# MODIFIED_BASHRC=1  # assumes bashrc already has line to source the file
+if [[ -z $IS_SOURCED_FROM_BASHRC ]]; then
 	unset MODIFIED_BASHRC # guarantees it is not set
 	ECHO_COLOR $YELLOW NO
 	ECHO_COLOR $YELLOW "---ACTION REQUIRED---"
@@ -86,7 +87,7 @@ if [[ -z $GREPPED ]]; then
 	ECHO_COLOR $BOLD "Would you like me to append the line to your .bashrc for you? [n] " 0
 	read -n1
 	echo ""
-	if [[ "$REPLY" == "y" || "$REPLY" == 'Y' ]]; then
+	if [[ "$REPLY" == @(y|Y) ]]; then
 		echo -en "\nappending source invocation to $HOME/.bashrc..."
 		echo $BASHRC_LINE >> $HOME/.bashrc
 		if [[ $? == 0 ]]; then
@@ -100,11 +101,9 @@ else
 	ECHO_COLOR $GREEN "YES"
 fi
 
-NO_CHANGE=0
-if [[ ! -z $GREPPED && $ALREADY_INSTALLED == 1 ]]; then
-	NO_CHANGE=1
-fi
-if [[ $? == 0 && $NO_CHANGE != 1 ]]; then
+if [[ ! -z $IS_SOURCED_FROM_BASHRC && $SOURCE_SAME_AS_DEST == 1 ]]; then
+	ECHO_COLOR $BOLD "The installation was already up to date."
+else
 	ECHO_COLOR $YELLOWBOLD "\n---POST INSTALLATION ACTIONS---"
 	ECHO_COLOR $BOLD "the installation was successful, " 0
 	if [[ ! $MODIFIED_BASHRC ]]; then
@@ -116,7 +115,5 @@ if [[ $? == 0 && $NO_CHANGE != 1 ]]; then
 		echo "$(ECHO_COLOR $BOLD 1)) $BASHRC_LINE"
 		echo "or $(ECHO_COLOR $BOLD 2)) start a new terminal session"
 	fi
-else
-	ECHO_COLOR $BOLD "The installation was already up to date."
 fi
 
