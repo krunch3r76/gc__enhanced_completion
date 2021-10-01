@@ -1,5 +1,5 @@
 # golem
-# tag: main 2021-10-01T00:13:28+00:00
+# tag: main 2021-10-01T00:18:43+00:00
 # golem completion engine
 # author: krunch3r76 (https://github.com/krunch3r76)
 # license: poetic/GPL 3
@@ -13,14 +13,14 @@ subcommands=(golemsp yagna run stop settings	set show) 		# golemsp subcommands m
 
 
 
-# INPUT: words {global}, COMP_LINE {imported env}
+# INPUT: gc__cwords {global}, COMP_LINE {imported env}
 # OUTPUT: produce output of the command line proceeded with -h
 # POST: N/A
 _gc__context_help() {
 	# DOCSTRING: gets corresponding output of command on the line from postfixing -h for help
 	echo -e "\n-+-+-+-+-+-+-+-+-+-+-+-+-+-+"
 	$COMP_LINE -h
-	echo -n "${PS1@P}${words[@]}"
+	echo -n "${PS1@P}${gc__cwords[@]}"
 }
 
 
@@ -40,7 +40,7 @@ _gc__completion_golemsp() {
 		options=(--subnet --account --payment-network --log-dir --debug)
 	elif [[ "$ULTIMATE" == "settings" ]]; then
 		options=(set show)
-	elif [[ "$ULTIMATE" == "set" ]]; then
+	elif [[ "$ULTIMATE" == "set" && $PENULTIMATE == "settings" ]]; then
 		options=(--node-name --cores --memory --disk --starting-fee --env-per-hour --cpu-per-hour --acount --payment-network)
 	fi
 	COMPREPLY=($(compgen -W "${options[*]}" \"${COMP_WORDS[$COMP_CWORD]}\")) # generate and use possible expansions in options from the word under the cursor
@@ -50,25 +50,25 @@ _gc__completion_golemsp() {
 
 
 
-# INPUT: words {global}
+# INPUT: gc__cwords {global}
 # OUTPUT: space delimited tuple of size 1 or 2 containing ULTIMATE and if found PENULTIMATE
 # POST: none
 _gc__completion__rfind_subcommands() {
-	# DOCSTRING: reverse find first and optionally second subcommand in the words on the command line before cword
+	# DOCSTRING: reverse find first and optionally second subcommand in the gc__cwords on the command line before cword
 	
 	local RINDEX
 	# reverse move index to next subcommand, then store in ULTIMATE
 	for (( RINDEX=$(( COMP_CWORD - 1 )); RINDEX > -1; RINDEX-- )); do
-		if [[ "${subcommands[*]}" =~ (^| )${words[$RINDEX]}($| ) ]]; then
-			ULTIMATE=${words[$RINDEX]}
+		if [[ "${subcommands[*]}" =~ (^| )${gc__cwords[$RINDEX]}($| ) ]]; then
+			local ULTIMATE=${gc__cwords[$RINDEX]}
 			break # on first subcommand seen
 		fi
 	done
 
 	# reverse move index to next subcommand if preset, then store in PENULTIMATE
 	for (( RINDEX=$(( RINDEX - 1 )); RINDEX > -1; RINDEX-- )); do
-		if [[ "${subcommands[*]}" =~ (^| )${words[$RINDEX]}($| ) ]]; then
-			PENULTIMATE=${words[$RINDEX]}
+		if [[ "${subcommands[*]}" =~ (^| )${gc__cwords[$RINDEX]}($| ) ]]; then
+			local PENULTIMATE=${gc__cwords[$RINDEX]}
 			break # break on first subcommand seen
 		fi
 	done
@@ -106,7 +106,7 @@ _gc__completion_yagna() {
 _gc__completion() { 
 	# DOCSTRING: handle golemsp, yagna specific logic
 	# notes: ULTIMATE refers to the last occurring subcommand, PENULTIMATE is the preceding subcommand/command if present
-	words=("${COMP_WORDS[@]}") # global copy of the words in the current command line
+	gc__cwords=("${COMP_WORDS[@]}") # global copy of the gc__cwords in the current command line
 	unset options # clear options in case sourced into current session previously
 	
 	if [[ ! $2 ]]; then # cursor over empty space so provide context help
