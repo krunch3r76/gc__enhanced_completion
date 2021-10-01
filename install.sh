@@ -29,12 +29,13 @@ ECHO_COLOR() {
 NOCOLOR="\e[0m"
 ###########################################
 
+
 SOURCE_FILE=gc_golem
 
 # ensure there is a file to install
 if [[ ! -e $SOURCE_FILE ]]; then
 	ECHO_COLOR $RED "the script file is not in the directory, so it cannot be installed!"
-	exit
+	exit 1
 fi
 
 SOURCE_VERSION=$(grep "# tag:" $SOURCE_FILE | sed -E 's/^[^:]*[:][[:space:]]*(.*)[[:space:]]*$/\1/' )
@@ -58,25 +59,21 @@ if [[ $SOURCE_SAME_AS_DEST == 1 ]]; then
 else
 	ECHO_COLOR $BOLD "...NO"
 	INSTALL_CMD="install -m644 $SOURCE_FILE -D $DEST_FILEPATH"
-fi
-
-
-if [[ ! -v SOURCE_SAME_AS_DEST ]]; then
 	echo -n "installing to $DEST_FILEPATH..."
 	$INSTALL_CMD 2>/dev/null
 	if [[ $? == 0 ]]; then
 		ECHO_COLOR $GREEN "OK"
 	else
 		ECHO_COLOR $RED "FAILED"
-		exit
+		exit 2
 	fi
 fi
+
 
 echo -n "bashrc contains source invocation..."
 BASHRC_LINE="source \$HOME/.local/share/bash-completion/completions/$SOURCE_FILE"
 
 IS_SOURCED_FROM_BASHRC=$(egrep ^source $HOME/.bashrc | grep $SOURCE_FILE 2>/dev/null)
-# MODIFIED_BASHRC=1  # assumes bashrc already has line to source the file
 if [[ -z $IS_SOURCED_FROM_BASHRC ]]; then
 	unset MODIFIED_BASHRC # guarantees it is not set
 	ECHO_COLOR $YELLOW NO
