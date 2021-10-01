@@ -6,11 +6,25 @@
 #
 # install to $HOME/.local/share/bash-completion/completions/golem
 
-YAGNA_COMPLETION_ENGINE=$(yagna complete bash 2>&1 | head -n-1 )	# store the completion engine script produced by yagna
+YAGNA_COMPLETION_ENGINE=$(yagna complete bash 2>&1 | egrep --invert-match '^complete')	# store the completion engine script produced by yagna
 complete -r -o bashdefault -o default -F _yagna yagna 2>/dev/null	# clear before reload of yagna official script
 source /dev/stdin <<<$YAGNA_COMPLETION_ENGINE 				# add yagna official completion engine
-gc__subcommands=(golemsp yagna run stop settings	set show)	# golemsp subcommands manually added
 
+# check for internal support of golemsp completions
+GOLEMSP_COMPLETION_ENGINE_FULL=$(golemsp complete bash 2>&1)
+if [[ $? == 0 ]]; then # command to get the completions ran successfully
+	unset GOLEMSP_SUPPORTED
+	complete -r -o bashdefault -o default -F _golemsp golemsp 2>/dev/null	# clear before reload of golemsp official script
+	GOLEMSP_COMPLETION_ENGINE=$(echo "$GOLEMSP_COMPLETION_ENGINE_FULL" | egrep --invert-match '^complete')
+	source /dev/stdin <<<$GOLEMSP_COMPLETION_ENGINE
+	[[ $(declare -f _golemsp) ]] && GOLEMSP_SUPPORTED=1 # the expected completion function has been defined
+fi
+
+if [[ $GOLEMSP_SUPPORTED ]]; then
+	source /dev/stdin <<<$GOLEMSP_COMPLETION_ENGINE
+fi
+
+gc__subcommands=(golemsp yagna run stop settings	set show)	# golemsp subcommands manually added
 
 
 # INPUT: gc__cwords {global}, COMP_LINE {imported env}
@@ -18,8 +32,8 @@ gc__subcommands=(golemsp yagna run stop settings	set show)	# golemsp subcommands
 # POST: N/A
 _gc__context_help() {
 	# DOCSTRING: gets corresponding output of command on the line from postfixing -h for help
-	echo -e "\n-+-+-+-+-+-+-+-+-+-+-+-+-+-+"
-	$COMP_LINE -h
+	echo -e "\n-+-+-+-+-+-+-+-+-+-+-+-+-+-+-"
+	[[ ! $1 == @(-h|help) ]] && $COMP_LINE -h || $COMP_LINE
 	echo -n "${PS1@P}${gc__cwords[@]}"
 }
 
@@ -56,7 +70,6 @@ _gc__completion_golemsp() {
 # POST: none
 _gc__completion__rfind_subcommands() {
 	# DOCSTRING: reverse find first and optionally second subcommand in the gc__cwords on the command line before cword
-	
 	local RINDEX
 	# reverse move index to next subcommand, then store in ULTIMATE
 	for (( RINDEX=$(( COMP_CWORD - 1 )); RINDEX > -1; RINDEX-- )); do
@@ -82,20 +95,6 @@ _gc__completion__rfind_subcommands() {
 
 
 
-# IN: none
-# OUT: none
-# PRE: none
-# POST: $COMPREPLY set with possible expansions of word under cursor as per yagna's engine
-_gc__completion_yagna() {
-	# DOCSTRING: tab complete current word for yagna
-	_yagna # build COMPREPLY with the Golem official imported completions
-	# can inspect COMPREPLY and replace with the set difference from COMP_WORDS
-	# to eliminate duplicates on the command line (so e.g. a flag already set is not suggested again)
-}
-
-
-
-
 
 
 
@@ -104,12 +103,13 @@ _gc__completion_yagna() {
 # OUT: none
 # PRE: none
 # POST: display updated with completion suggestions or contextual help for command as entered
+# comments: $1 -> root command,  $2 -> word being completed, $3-> word before word being completed
 _gc__completion() { 
 	# DOCSTRING: handle golemsp, yagna specific logic
 	# notes: ULTIMATE refers to the last occurring subcommand, PENULTIMATE is the preceding subcommand/command if present
 	gc__cwords=("${COMP_WORDS[@]}") # global copy of the list of words in the current command line
 	if [[ ! $2 ]]; then # cursor over empty space so provide context help
-		_gc__context_help
+		_gc__context_help $3
 	else # cursor in word, so provide possible completions
 		local ULTIMATE PENULTIMATE
 		local ULTIMATES=$(_gc__completion__rfind_subcommands)
@@ -117,9 +117,9 @@ _gc__completion() {
 
 		if [[ ${#ULTIMATES[*]} > 1 ]]; then PENULTIMATE=${ULTIMATES[1]}; fi
 		if [[ "$1" == "golemsp" ]]; then
-			_gc__completion_golemsp $ULTIMATE ${PENULTIMATE:+$PENULTIMATE}
+			[[ $GOLEMSP_SUPPORTED ]] && _golemsp || _gc__completion_golemsp $ULTIMATE ${PENULTIMATE:+$PENULTIMATE}
 		elif [[ "$1" == "yagna" ]]; then
-			_gc__completion_yagna
+			_yagna
 		fi
 	fi
 } && 
