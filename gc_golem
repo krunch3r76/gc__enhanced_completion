@@ -1,5 +1,5 @@
 # golem
-# tag: main 2021-09-30T17:22:53-07:00
+# tag: main 2021-09-30T17:26:33-07:00
 # golem completion engine
 # author: krunch3r76 (https://github.com/krunch3r76)
 # license: poetic/GPL 3
@@ -27,13 +27,14 @@ _gc__context_help() {
 
 
 
-# INPUT: options {global}, last entered subcommand, second to last entered subcommand
+# INPUT: last entered subcommand, second to last entered subcommand
 # OUTPUT: none
 # POST: COMPREPLY {global} set with possible completions
 _gc__completion_golemsp() {
 	# DOCSTRING: tab complete current word for command name golemsp
 	local ULTIMATE=$1
 	local PENULTIMATE=$2
+	local options
 	if [[ "$ULTIMATE" == "golemsp" ]]; then
 		options=(run stop settings status help)
 	elif [[ "$ULTIMATE" == "run" ]]; then
@@ -107,7 +108,6 @@ _gc__completion() {
 	# DOCSTRING: handle golemsp, yagna specific logic
 	# notes: ULTIMATE refers to the last occurring subcommand, PENULTIMATE is the preceding subcommand/command if present
 	gc__cwords=("${COMP_WORDS[@]}") # global copy of the list of words in the current command line
-	unset options # clear options in case sourced into current session previously
 	if [[ ! $2 ]]; then # cursor over empty space so provide context help
 		_gc__context_help
 	else # cursor in word, so provide possible completions
