@@ -1,5 +1,5 @@
 # golem
-# tag: main 2021-10-01T00:18:43+00:00
+# tag: main 2021-09-30T17:22:53-07:00
 # golem completion engine
 # author: krunch3r76 (https://github.com/krunch3r76)
 # license: poetic/GPL 3
@@ -108,12 +108,12 @@ _gc__completion() {
 	# notes: ULTIMATE refers to the last occurring subcommand, PENULTIMATE is the preceding subcommand/command if present
 	gc__cwords=("${COMP_WORDS[@]}") # global copy of the list of words in the current command line
 	unset options # clear options in case sourced into current session previously
-	local ULTIMATE PENULTIMATE
 	if [[ ! $2 ]]; then # cursor over empty space so provide context help
 		_gc__context_help
 	else # cursor in word, so provide possible completions
+		local ULTIMATE PENULTIMATE
 		local ULTIMATES=$(_gc__completion__rfind_subcommands)
-		local ULTIMATE=${ULTIMATES[0]}
+		ULTIMATE=${ULTIMATES[0]}
 
 		if [[ ${#ULTIMATES[*]} > 1 ]]; then PENULTIMATE=${ULTIMATES[1]}; fi
 		if [[ "$1" == "golemsp" ]]; then
