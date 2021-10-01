@@ -6,22 +6,31 @@
 #
 # install to $HOME/.local/share/bash-completion/completions/golem
 
-YAGNA_COMPLETION_ENGINE=$(yagna complete bash 2>&1 | egrep --invert-match '^complete')	# store the completion engine script produced by yagna
-complete -r -o bashdefault -o default -F _yagna yagna 2>/dev/null	# clear before reload of yagna official script
+YAGNA_COMPLETION_ENGINE=$(yagna complete bash 2>&1)	# store the completion engine script produced by yagna
 source /dev/stdin <<<$YAGNA_COMPLETION_ENGINE 				# add yagna official completion engine
-
+# remove completion hooks to ensure overrides defined in this source
+complete -r -o bashdefault -o default -F _yagna yagna 2>/dev/null	# clear before reload of yagna official script
+if [[ $? != 0 ]]; then
+	echo "gc__enhanced_completion could not parse yagna's completion engine"
+	exit 2
+fi
 # check for internal support of golemsp completions
 GOLEMSP_COMPLETION_ENGINE_FULL=$(golemsp complete bash 2>&1)
 if [[ $? == 0 ]]; then # command to get the completions ran successfully
 	unset GOLEMSP_SUPPORTED
-	complete -r -o bashdefault -o default -F _golemsp golemsp 2>/dev/null	# clear before reload of golemsp official script
-	GOLEMSP_COMPLETION_ENGINE=$(echo "$GOLEMSP_COMPLETION_ENGINE_FULL" | egrep --invert-match '^complete')
+	GOLEMSP_COMPLETION_ENGINE=$(echo "$GOLEMSP_COMPLETION_ENGINE_FULL")
 	source /dev/stdin <<<$GOLEMSP_COMPLETION_ENGINE
+	# remove completion hooks to ensure overrides defined in this source
+	complete -r -o bashdefault -o default -F _golemsp golemsp 2>/dev/null	# clear before reload of golemsp official script
 	[[ $(declare -f _golemsp) ]] && GOLEMSP_SUPPORTED=1 # the expected completion function has been defined
 fi
 
 if [[ $GOLEMSP_SUPPORTED ]]; then
 	source /dev/stdin <<<$GOLEMSP_COMPLETION_ENGINE
+	if [[ $? != 0 ]]; then
+		echo "gc__enhanced_completion could not parse yagna's completion engine"
+		exit 2
+	fi
 else
 	gc__subcommands=(golemsp yagna run stop settings	set show)	# golemsp subcommands manually added
 fi
