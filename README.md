@@ -9,7 +9,7 @@ this program is designed to work with requestor and provider installations of th
 ![Animated gif demo](https://krunch3r76.github.io/gc__bash_completion/gc__completion.gif)
 
 # BACKGROUND
-The problem gc__enhanced_completion solves is providing detailed help during command entry at a full stop by printing the help menu for the current subcommand during entry. yagna's builtin completion engine alone will only list possible completions in a given subcommand. gc__bash_completion extends yagna's builtin completion engine by adding contextual help.
+The problem gc__enhanced_completion solves is providing detailed help during command entry at a full stop by printing the help menu for the current subcommand during entry. yagna's builtin completion engine alone will only list possible completions in a given subcommand. gc__enhanced_completion extends yagna's builtin completion engine by adding contextual help.
 
 
 # INSTALLATION
