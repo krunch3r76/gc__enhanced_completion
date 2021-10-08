@@ -1,4 +1,4 @@
-#!/usr/bin/bash
+#!/bin/bash
 # install.sh
 # installs bash completions to $HOME/.local
 # and updates .bashrc
