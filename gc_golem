@@ -1,5 +1,5 @@
 # gc_golem
-# tag: main 2021-10-01T14:08:20-07:00
+# tag: main 2021-10-08T23:58:30-07:00
 # golem completion engine
 # author: krunch3r76 (https://github.com/krunch3r76)
 # license: poetic/GPL 3
@@ -14,6 +14,7 @@ if [[ $? != 0 ]]; then
 	echo "gc__enhanced_completion could not parse yagna's completion engine"
 	exit 2
 fi
+
 # check for internal support of golemsp completions
 GOLEMSP_COMPLETION_ENGINE_FULL=$(golemsp complete bash 2>&1)
 if [[ $? == 0 ]]; then # command to get the completions ran successfully
@@ -31,6 +32,7 @@ if [[ $GOLEMSP_SUPPORTED ]]; then
 		echo "gc__enhanced_completion could not parse yagna's completion engine"
 		exit 2
 	fi
+	gc__subcommands=(golemsp yagna) # kludge for _gc__completion__rfind_subcommands upon invocation
 else
 	gc__subcommands=(golemsp yagna run stop settings	set show)	# golemsp subcommands manually added
 fi
@@ -43,7 +45,11 @@ fi
 _gc__context_help() {
 	# DOCSTRING: gets corresponding output of command on the line from postfixing -h for help
 	echo -e "\n-+-+-+-+-+-+-+-+-+-+-+-+-+-+-"
-	[[ ! $1 == @(-h|help) ]] && $COMP_LINE -h || $COMP_LINE
+	if [[ ! $1 == @(-h|help) ]]; then
+		$COMP_LINE -h
+	else
+		$COMP_LINE
+	fi
 	echo -n "${PS1@P}${gc__cwords[@]}"
 }
 
@@ -124,10 +130,15 @@ _gc__completion() {
 		local ULTIMATE PENULTIMATE
 		local ULTIMATES=$(_gc__completion__rfind_subcommands)
 		ULTIMATE=${ULTIMATES[0]}
-
 		if [[ ${#ULTIMATES[*]} > 1 ]]; then PENULTIMATE=${ULTIMATES[1]}; fi
+
 		if [[ "$1" == "golemsp" ]]; then
-			[[ $GOLEMSP_SUPPORTED ]] && _golemsp || _gc__completion_golemsp $ULTIMATE ${PENULTIMATE:+$PENULTIMATE}
+			if [[ $GOLEMSP_SUPPORTED ]]; then
+				_golemsp
+ 			else
+				_gc__completion_golemsp $ULTIMATE ${PENULTIMATE:+$PENULTIMATE}
+			fi
+
 		elif [[ "$1" == "yagna" ]]; then
 			_yagna
 		fi
