@@ -11,14 +11,13 @@ source /dev/stdin <<<$YAGNA_COMPLETION_ENGINE 				# add yagna official completio
 # remove completion hooks to ensure overrides defined in this source
 complete -r -o bashdefault -o default -F _yagna yagna 2>/dev/null	# clear before reload of yagna official script
 if [[ $? != 0 ]]; then
-	echo "gc__enhanced_completion could not parse yagna's completion engine"
-	exit 2
+	echo "[[gc__enhanced_completion]] ERROR: could not parse yagna's completion engine"
+	return
 fi
 
 # check for internal support of golemsp completions
 GOLEMSP_COMPLETION_ENGINE_FULL=$(golemsp complete bash 2>&1)
 if [[ $? == 0 ]]; then # command to get the completions ran successfully
-	unset GOLEMSP_SUPPORTED
 	GOLEMSP_COMPLETION_ENGINE=$(echo "$GOLEMSP_COMPLETION_ENGINE_FULL")
 	source /dev/stdin <<<$GOLEMSP_COMPLETION_ENGINE
 	# remove completion hooks to ensure overrides defined in this source
@@ -27,12 +26,11 @@ if [[ $? == 0 ]]; then # command to get the completions ran successfully
 fi
 
 if [[ $GOLEMSP_SUPPORTED ]]; then
+	unset GOLEMSP_SUPPORTED
 	source /dev/stdin <<<$GOLEMSP_COMPLETION_ENGINE
 	if [[ $? != 0 ]]; then
-		echo "gc__enhanced_completion could not parse yagna's completion engine"
-		exit 2
+		echo "[[gc__enhanced_completion]] WARN: could not parse golemsp's completion engine"
 	fi
-	gc__subcommands=(golemsp yagna) # kludge for _gc__completion__rfind_subcommands upon invocation
 else
 	gc__subcommands=(golemsp yagna run stop settings	set show)	# golemsp subcommands manually added
 fi
@@ -86,6 +84,7 @@ _gc__completion_golemsp() {
 # POST: none
 _gc__completion__rfind_subcommands() {
 	# DOCSTRING: reverse find first and optionally second subcommand in the gc__cwords on the command line before cword
+	gc__subcommands=${gc__subcommands:-(golemsp yagna)} # kludge for _gc__completion__rfind_subcommands upon invocation
 	local RINDEX
 	# reverse move index to next subcommand, then store in ULTIMATE
 	for (( RINDEX=$(( COMP_CWORD - 1 )); RINDEX > -1; RINDEX-- )); do
