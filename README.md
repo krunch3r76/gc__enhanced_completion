@@ -48,3 +48,6 @@ The only changes made to the system after installation are
 2) if requested, a line is added to $HOME/.bashrc to source the file from #1
 
 The program does not in any way alter the original golemsp or yagna installation nor perform any actions on the user's behalf. Neither does it phone home or collect telemetry as well.
+
+# TIPS
+The annoying beep sound you may be hearing when tabbing an empty space can be turned off in a session with `bind 'set bell-style none'`
