@@ -26,7 +26,6 @@ if [[ $? == 0 ]]; then # command to get the completions ran successfully
 fi
 
 if [[ $GOLEMSP_SUPPORTED ]]; then
-	unset GOLEMSP_SUPPORTED
 	source /dev/stdin <<<$GOLEMSP_COMPLETION_ENGINE
 	if [[ $? != 0 ]]; then
 		echo "[[gc__enhanced_completion]] WARN: could not parse golemsp's completion engine"
