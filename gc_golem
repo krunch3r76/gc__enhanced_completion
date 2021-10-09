@@ -1,5 +1,5 @@
 # gc_golem
-# tag: main 2021-10-08T23:58:30-07:00
+# tag: main 2021-10-09T00:20:49-07:00
 # golem completion engine
 # author: krunch3r76 (https://github.com/krunch3r76)
 # license: poetic/GPL 3
@@ -144,6 +144,6 @@ _gc__completion() {
 		fi
 	fi
 } && 
-complete -F _gc__completion golemsp yagna -D _gc__context_help
+complete -F _gc__completion golemsp yagna  
 
 
