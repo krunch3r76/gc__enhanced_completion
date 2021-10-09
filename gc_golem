@@ -1,10 +1,14 @@
 # gc_golem
-# tag: main 2021-10-09T10:44:08-07:00
+# tag: main 2021-10-09T10:48:41-07:00
 # golem completion engine
 # author: krunch3r76 (https://github.com/krunch3r76)
 # license: poetic/GPL 3
 #
 # install to $HOME/.local/share/bash-completion/completions/golem
+
+if [[ -v SUDO_USER ]]; then
+	return # assume completion engines not used in sudo environment
+fi
 
 YAGNA_COMPLETION_ENGINE=$(yagna complete bash 2>&1)	# store the completion engine script produced by yagna
 if [[ $? != 0 ]]; then
