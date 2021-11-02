@@ -55,7 +55,7 @@ _gc__context_help() {
 	else
 		$COMP_LINE
 	fi
-	echo -n "${PS1@P}${gc__cwords[@]}"
+	echo -n "${PS1@P}$COMP_LINE"
 }
 
 
