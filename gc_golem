@@ -33,12 +33,8 @@ if [[ $? == 0 ]]; then # command to get the completions ran successfully
 	[[ $(declare -f _golemsp) ]] && GOLEMSP_SUPPORTED=1 # the expected completion function has been defined
 fi
 
-if [[ $GOLEMSP_SUPPORTED ]]; then
-	source /dev/stdin <<<$GOLEMSP_COMPLETION_ENGINE
-	if [[ $? != 0 ]]; then
-		echo "[[gc__enhanced_completion]] WARN: could not parse golemsp's completion engine"
-	fi
-else # fallback to custom completion engine
+if [[ ! $GOLEMSP_SUPPORTED ]]; then
+	echo "[[gc__enhanced_completion]] WARN: could not parse golemsp's completion engine, manually added"
 	gc__subcommands=(golemsp yagna run stop settings	set show)	# golemsp subcommands manually added
 fi
 

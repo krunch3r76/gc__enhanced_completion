@@ -74,6 +74,10 @@ echo -n "bashrc contains source invocation..."
 BASHRC_LINE="source \$HOME/.local/share/bash-completion/completions/$SOURCE_FILE"
 
 IS_SOURCED_FROM_BASHRC=$(egrep ^source $HOME/.bashrc | grep $SOURCE_FILE 2>/dev/null)
+if [[ ! -z IS_SOURCED_FROM_BASHRC ]]; then
+	MODIFIED_BASHRC=1
+fi
+
 if [[ -z $IS_SOURCED_FROM_BASHRC ]]; then
 	unset MODIFIED_BASHRC # guarantees it is not set
 	ECHO_COLOR $YELLOW NO
