@@ -1,5 +1,5 @@
 # gc_golem
-# tag: main 2021-10-09T10:48:41-07:00
+# version: 20251024_1
 # golem completion engine
 # author: krunch3r76 (https://github.com/krunch3r76)
 # license: poetic/GPL 3
@@ -34,7 +34,7 @@ if [[ $? == 0 ]]; then # command to get the completions ran successfully
 fi
 
 if [[ ! $GOLEMSP_SUPPORTED ]]; then
-	echo "[[gc__enhanced_completion]] WARN: could not parse golemsp's completion engine, manually added"
+#	echo "[[gc__enhanced_completion]] WARN: could not parse golemsp's completion engine, manually added"
 	gc__subcommands=(golemsp yagna run stop settings	set show)	# golemsp subcommands manually added
 fi
 
