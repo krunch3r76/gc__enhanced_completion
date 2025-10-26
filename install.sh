@@ -13,6 +13,8 @@ YELLOWBOLD="$YELLOW$BOLD"
 BLINK="\e\033[5m"
 NOCOLOR="\e[0m"
 
+_read_opts="-r -u 2"
+
 ECHO_COLOR() {
 	local COLOR=$1
 	local MSG=$2
@@ -91,7 +93,7 @@ else
 	echo "You can update your .bashrc by appending the following line to it:"
 	echo -e "\t$BASHRC_LINE"
 	ECHO_COLOR $BOLD "Would you like me to append this to your .bashrc for you? [Y/n] " 0
-	read -n1
+	read ${_read_opts} -n1
 	echo ""
 	if [[ "$REPLY" != @(n|N) ]]; then
 		echo -en "\nappending source invocation to $HOME/.bashrc..."
