@@ -1,5 +1,4 @@
 #!/usr/bin/env bash
-
 # install.sh
 # Installs bash completions to $HOME/.local and updates .bashrc
 
@@ -31,14 +30,13 @@ SOURCE_FILE="gc_golem"
 TMP_FILE="/tmp/${SOURCE_FILE}"
 LOCAL_FILE="${PWD}/${SOURCE_FILE}"
 
-# Check if gc_golem exists in current directory, otherwise fetch from GitHub
-if [[ ! -e $LOCAL_FILE ]]; then
-	ECHO_COLOR $YELLOW "INFO: Fetching gc_golem from GitHub..."
-	curl -sL "https://raw.githubusercontent.com/krunch3r76/gc__enhanced_completion/main/gc_golem" -o "$TMP_FILE"
-	if [[ $? -ne 0 ]]; then
-		ECHO_COLOR $RED "ERROR: Failed to fetch gc_golem from GitHub."
-		exit 1
-	fi
+if [[ ! -e $LOCAL_FILE && ! -e $TMP_FILE ]]; then
+	curl https://raw.githubusercontent.com/krunch3r76/gc__enhanced_completion/main/${SOURCE_FILE} >${TMP_FILE}
+fi
+
+if [[ ! -e $LOCAL_FILE && ! -e $TMP_FILE ]]; then
+	ECHO_COLOR $RED "ERROR: Neither $LOCAL_FILE nor $TMP_FILE exists."
+	exit 1
 fi
 
 SOURCE_FILE_TO_USE=$LOCAL_FILE
@@ -69,17 +67,20 @@ fi
 
 if [ -z "$DEST_EXISTS" ] || [ "$SOURCE_VERSION" != "$DEST_VERSION" ]; then
 	cp "$SOURCE_FILE_TO_USE" "$DEST_FILEPATH"
-	echo "✅ Successfully installed version '$SOURCE_VERSION'."
+	echo "✅ Successfully installed version '$SOURCE_VERSION'"
+	echo "    to $DEST_FILEPATH."
 else
-	echo "👍 No update needed, version '$SOURCE_VERSION' already installed."
+	echo "👍 No update needed, version '$SOURCE_VERSION'"
+	echo "    at $DEST_FILEPATH"
+	echo "    was previously installed."
 fi
 
-BASHRC_LINE="source \$HOME/.local/share/bash-completion/completions/$SOURCE_FILE"
-IS_SOURCED_FROM_BASHRC=$(grep -E "^[[:space:]]*source[[:space:]]+.*$SOURCE_FILE" "$HOME/.bashrc" 2>/dev/null)
+BASHRC_LINE="source \$HOME/.local/share/bash-completion/completions/${SOURCE_FILE}"
+IS_SOURCED_FROM_BASHRC=$(fgrep "$SOURCE_FILE" "$HOME/.bashrc") || true
 
-# Split the status message into two parts for better readability
 echo "🔍 Checking if .bashrc "
 echo -n "    already sources the completion script... "
+
 if [[ -n $IS_SOURCED_FROM_BASHRC ]]; then
 	ECHO_COLOR $YELLOWBOLD "YES - no need to update"
 	MODIFIED_BASHRC=1
@@ -89,10 +90,10 @@ else
 	echo "Your .bashrc needs modification to load the installed completion engine automatically."
 	echo "You can update your .bashrc by appending the following line to it:"
 	echo -e "\t$BASHRC_LINE"
-	ECHO_COLOR $BOLD "Would you like me to append the line to your .bashrc for you? [n] " 0
+	ECHO_COLOR $BOLD "Would you like me to append this to your .bashrc for you? [Y/n] " 0
 	read -n1
 	echo ""
-	if [[ "$REPLY" == @(y|Y) ]]; then
+	if [[ "$REPLY" != @(n|N) ]]; then
 		echo -en "\nappending source invocation to $HOME/.bashrc..."
 		echo "$BASHRC_LINE" >>"$HOME/.bashrc"
 		if [[ $? -eq 0 ]]; then
@@ -101,10 +102,12 @@ else
 		else
 			echo -e "FAILED"
 		fi
+	else
+		echo -e "\n💾✨ No problem, but be sure to add the above line your .bashrc to unlock the power!"
 	fi
 fi
 
-if [[ -z $IS_SOURCED_FROM_BASHRC && $SOURCE_SAME_AS_DEST -eq 0 ]]; then
+if [[ -z $IS_SOURCED_FROM_BASHRC && $DEST_EXISTS -eq 0 ]]; then
 	echo
 	ECHO_COLOR $YELLOWBOLD "\n---POST INSTALLATION ACTIONS---"
 	ECHO_COLOR $BOLD "the installation was successful, " 0
@@ -119,6 +122,7 @@ if [[ -z $IS_SOURCED_FROM_BASHRC && $SOURCE_SAME_AS_DEST -eq 0 ]]; then
 	fi
 fi
 
-if [[ "$TMP_FILE" == "/tmp/${SOURCE_FILE}" && -e "$TMP_FILE" ]]; then
-	rm -f "$TMP_FILE"
+# Clean up temporary file if it was downloaded
+if [[ "$SCRIPT_PATH" == "$TMP_PATH" && -e "$TMP_PATH" ]]; then
+	rm -f "$TMP_PATH"
 fi
