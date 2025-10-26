@@ -13,41 +13,37 @@ The problem gc__enhanced_completion solves is providing detailed help during com
 
 
 # INSTALLATION
-## clone
+## quick and clean
+```
+curl -sSf https://github.com/krunch3r76/gc__enhanced_completion/blob/main/install.sh | bash -
+```
+
+## clone and tinker method
 ```
 git clone https://github.com/krunch3r76/gc__enhanced_completion.git
 cd gc__enhanced_completion
 ```
 
-### automatically install/update
+### automatically install/update via git
 ```
 $ git pull && ./install.sh
 ```
 - installs the completion engine to $HOME/.local/share/bash-completion/completions/gc_golem (if file is absent or version different)
 - updates .bashrc to automatically load the completion engine [optional] if needed
 
-### manually install
+## manually install
 ```
 (gc__enhanced_completion)$ mkdir -p $HOME/.local/share/bash-completion/completions/
 (gc__enhanced_completion)$ cp gc_golem $HOME/.local/share/bash-completion/completions/
 (gc__enhanced_completion)$ $(set -o noclobber; echo 'source $HOME/.local/share/bash-completion/completions/gc_golem' >> $HOME/.bashrc)
 ```
 
-# UPDATE WITH EXISTING CLONED REPO
-the following should not be necessary once the script has matured (it is only a couple days in) unless some unexpected behavior occurs, in which case it is recommended to check if an update is available to fix it:
-
-```
-$ cd gc__enhanced_completion
-$ git pull # if message indicates already up to date it is still okay to run the install script
-$ ./install.sh
-```
-
 # COMMENTS
 The only changes made to the system after installation are
 1) the file gc_golem is installed to $HOME/.local/share/bash-completion/completions/gc_golem
-2) if requested, a line is added to $HOME/.bashrc to source the file from 1)
+2) $HOME/.bashrc if adding a line to source gc_golem
 
 The program does not in any way alter the original golemsp or yagna installation nor perform any actions on the user's behalf. Neither does it phone home or collect telemetry as well.
 
 # TIPS
-The annoying beep sound you may be hearing when tabbing an empty space can be turned off in a session with `bind 'set bell-style none'`
+The annoying beep sound you may be hearing when tabbing an empty space can be turned off via terminal preferences or in a session with `bind 'set bell-style none'`
