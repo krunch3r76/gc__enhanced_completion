@@ -34,7 +34,7 @@ LOCAL_FILE="${PWD}/${SOURCE_FILE}"
 GCBRANCH=${GCBRANCH:-main}
 
 if [[ -e $TMP_FILE ]]; then
-    rm $TMP_FILE
+	rm $TMP_FILE
 fi
 
 if [[ ! -e $LOCAL_FILE ]]; then
@@ -72,9 +72,13 @@ if [[ -e $DEST_FILEPATH ]]; then
 	DEST_VERSION=$(extract_version_from_file "$DEST_FILEPATH")
 fi
 
-if [ -z "$DEST_EXISTS" ] || [ "$SOURCE_VERSION" != "$DEST_VERSION" ]; then
+# Compute MD5 sums and copy if different
+src_md5=$(md5sum "$SOURCE_FILE_TO_USE" | awk '{print $1}')
+dest_md5=$(md5sum "$DEST_FILEPATH" 2>/dev/null | awk '{print $1}')
+
+if [[ -z "$DEST_EXISTS" || "$src_md5" != "$dest_md5" ]]; then
 	cp "$SOURCE_FILE_TO_USE" "$DEST_FILEPATH"
-	echo "✅ Successfully installed version '$SOURCE_VERSION'"
+	echo "✅ Successfully installed version $SOURCE_VERSION"
 	echo "    to $DEST_FILEPATH"
 	NEW_VERSION_INSTALLED=true
 else
@@ -140,4 +144,3 @@ fi
 if [[ "$SCRIPT_PATH" == "$TMP_PATH" && -e "$TMP_PATH" ]]; then
 	rm -f "$TMP_PATH"
 fi
-
