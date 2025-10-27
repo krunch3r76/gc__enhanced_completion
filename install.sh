@@ -31,9 +31,14 @@ fi
 SOURCE_FILE="gc_golem"
 TMP_FILE="/tmp/${SOURCE_FILE}"
 LOCAL_FILE="${PWD}/${SOURCE_FILE}"
+GCBRANCH=${GCBRANCH:-main}
 
-if [[ ! -e $LOCAL_FILE && ! -e $TMP_FILE ]]; then
-	curl https://raw.githubusercontent.com/krunch3r76/gc__enhanced_completion/main/${SOURCE_FILE} >${TMP_FILE}
+if [[ -e $TMP_FILE ]]; then
+    rm $TMP_FILE
+fi
+
+if [[ ! -e $LOCAL_FILE ]]; then
+	curl https://raw.githubusercontent.com/krunch3r76/gc__enhanced_completion/$GCBRANCH/${SOURCE_FILE} >${TMP_FILE}
 fi
 
 if [[ ! -e $LOCAL_FILE && ! -e $TMP_FILE ]]; then
@@ -70,7 +75,7 @@ fi
 if [ -z "$DEST_EXISTS" ] || [ "$SOURCE_VERSION" != "$DEST_VERSION" ]; then
 	cp "$SOURCE_FILE_TO_USE" "$DEST_FILEPATH"
 	echo "✅ Successfully installed version '$SOURCE_VERSION'"
-	echo "    to $DEST_FILEPATH."
+	echo "    to $DEST_FILEPATH"
 	NEW_VERSION_INSTALLED=true
 else
 	echo "👍 No update needed, version '$SOURCE_VERSION'"
@@ -95,7 +100,8 @@ else
 	ECHO_COLOR $YELLOW "---ACTION REQUIRED---"
 	echo "Your .bashrc needs modification to load the installed completion engine automatically."
 	echo "You can update your .bashrc by appending the following line to it:"
-	echo -e "\t$BASHRC_LINE"
+	# echo -e "\t$BASHRC_LINE"
+	ECHO_COLOR $RED "\t$BASHRC_LINE"
 	ECHO_COLOR $BOLD "Would you like me to append this to your .bashrc for you? [Y/n] " 0
 	read ${_read_opts} -n1
 	echo ""
@@ -105,11 +111,13 @@ else
 		if [[ $? -eq 0 ]]; then
 			ECHO_COLOR $GREEN "OK"
 			MODIFIED_BASHRC=1
+			ECHO_COLOR $GREEN "Either open a new terminal window or source ~/.bashrc to take advantage!"
 		else
 			echo -e "FAILED"
 		fi
 	else
-		echo -e "\n💾✨ No problem, but be sure to add the above line your .bashrc to unlock the power!"
+		echo -e "\n💾✨ No problem, but be sure to add the above line in red your .bashrc to unlock the power!"
+		echo "Then you can source ~/.bashrc or open a new terminal window to take advantage!"
 	fi
 fi
 
@@ -132,3 +140,4 @@ fi
 if [[ "$SCRIPT_PATH" == "$TMP_PATH" && -e "$TMP_PATH" ]]; then
 	rm -f "$TMP_PATH"
 fi
+

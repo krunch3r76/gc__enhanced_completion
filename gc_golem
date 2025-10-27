@@ -100,10 +100,7 @@ _gc__completion() {
 		if [[ "$1" == "golemsp" ]]; then
 			if [[ $GOLEMSP_SUPPORTED ]]; then
 				_golemsp
- 			else
-				# _gc__completion_golemsp $ULTIMATE ${PENULTIMATE:+$PENULTIMATE}
 			fi
-
 		elif [[ "$1" == "yagna" ]]; then
 			if [[ $YAGNA_SUPPORTED ]]; then
 				_yagna
