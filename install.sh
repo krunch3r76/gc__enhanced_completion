@@ -71,6 +71,7 @@ if [ -z "$DEST_EXISTS" ] || [ "$SOURCE_VERSION" != "$DEST_VERSION" ]; then
 	cp "$SOURCE_FILE_TO_USE" "$DEST_FILEPATH"
 	echo "✅ Successfully installed version '$SOURCE_VERSION'"
 	echo "    to $DEST_FILEPATH."
+	NEW_VERSION_INSTALLED=true
 else
 	echo "👍 No update needed, version '$SOURCE_VERSION'"
 	echo "    at $DEST_FILEPATH"
@@ -85,6 +86,9 @@ echo -n "    already sources the completion script... "
 
 if [[ -n $IS_SOURCED_FROM_BASHRC ]]; then
 	ECHO_COLOR $YELLOWBOLD "YES - no need to update"
+	if [[ $NEW_VERSION_INSTALLED ]]; then
+		ECHO_COLOR $YELLOWBOLD "    source ~/.bashrc or open a new terminal window to use it!"
+	fi
 	MODIFIED_BASHRC=1
 else
 	ECHO_COLOR $YELLOW "NO"
