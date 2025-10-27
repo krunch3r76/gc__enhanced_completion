@@ -1,49 +1,87 @@
 # gc__enhanced_completion
-an enhanced bash completion engine that extends built-in completions by providing contextual help for golemsp and yagna
 
-never again be at a loss in the middle of the command line as to what options or arguments are available to you _and what they mean_ when invoking **golemsp** or **yagna**. gc__enhanced_completion one-ups bash autocompletion at the press of a tab by providing contextual help straight from the command line. it will work seamlessly in every terminal session and integrate the official yagna completions from the current yagna installation without requiring the user to import them manually!
+**gc__enhanced_completion** is a Bash completion helper that extends the built‑in completions for **golemsp** and **yagna** by showing contextual help right in your terminal.  
+No more guessing what options or arguments are available – just press `<Tab>` and see a short description of each possible choice.
 
-this program is designed to work with requestor and provider installations of the Golem software suite. for more information about the Golem Network, please visit: https://www.golem.network
+> Works with both requestor and provider installations of the Golem software suite.  
+> Learn more about the Golem Network at <https://www.golem.network>.
 
-# DEMO
+---
+
+## Demo
+
 ![Animated gif demo](https://krunch3r76.github.io/gc__bash_completion/gc__completion.gif)
 
-# BACKGROUND
-The problem gc__enhanced_completion solves is providing detailed help during command entry at a full stop by printing the help menu for the current subcommand during entry. yagna's builtin completion engine alone will only list possible completions in a given subcommand. gc__enhanced_completion extends yagna's builtin completion engine by adding contextual help.
+---
 
+## Why this tool?
 
-# INSTALLATION
-## quick and clean
-```
+* **Built‑in yagna completion** only lists possible completions.  
+* **gc__enhanced_completion** prints the help text for the current subcommand while you type, giving you instant context.
+
+---
+
+## Installation
+
+### Quick & clean (recommended)
+
+```bash
 curl -sSf https://github.com/krunch3r76/gc__enhanced_completion/blob/main/install.sh | bash -
 ```
 
-## clone and tinker method
-```
+The script will:
+
+1. Copy `gc_golem` to `$HOME/.local/share/bash-completion/completions/`
+2. Add a line to your `.bashrc` (if it isn’t already there) so the completion is loaded automatically.
+
+### Clone & tinker
+
+```bash
 git clone https://github.com/krunch3r76/gc__enhanced_completion.git
 cd gc__enhanced_completion
 ```
 
-### automatically install/update via git
-```
-$ git pull && ./install.sh
-```
-- installs the completion engine to $HOME/.local/share/bash-completion/completions/gc_golem (if file is absent or version different)
-- updates .bashrc to automatically load the completion engine [optional] if needed
+#### Update from Git
 
-## manually install
-```
-(gc__enhanced_completion)$ mkdir -p $HOME/.local/share/bash-completion/completions/
-(gc__enhanced_completion)$ cp gc_golem $HOME/.local/share/bash-completion/completions/
-(gc__enhanced_completion)$ $(set -o noclobber; echo 'source $HOME/.local/share/bash-completion/completions/gc_golem' >> $HOME/.bashrc)
+```bash
+git pull && ./install.sh
 ```
 
-# COMMENTS
-The only changes made to the system after installation are
-1) the file gc_golem is installed to $HOME/.local/share/bash-completion/completions/gc_golem
-2) $HOME/.bashrc if adding a line to source gc_golem
+The script behaves exactly as in the quick install.
 
-The program does not in any way alter the original golemsp or yagna installation nor perform any actions on the user's behalf. Neither does it phone home or collect telemetry as well.
+### Manual installation
 
-# TIPS
-The annoying beep sound you may be hearing when tabbing an empty space can be turned off via terminal preferences or in a session with `bind 'set bell-style none'`
+If you prefer to do it yourself:
+
+```bash
+mkdir -p $HOME/.local/share/bash-completion/completions/
+cp gc_golem $HOME/.local/share/bash-completion/completions/
+
+# Add a source line to .bashrc if it isn’t already present
+set -o noclobber; echo 'source $HOME/.local/share/bash-completion/completions/gc_golem' >> $HOME/.bashrc
+```
+
+---
+
+## What changes are made?
+
+1. `gc_golem` is installed to `$HOME/.local/share/bash-completion/completions/`.
+2. (Optional) A line that sources the file is appended to your `.bashrc`.
+
+No other files are touched, and the tool never modifies the original **golemsp** or **yagna** binaries. It also does not send telemetry or “phone home”.
+
+---
+
+## Tips & Troubleshooting
+
+* **Disable the terminal bell** (the annoying beep when you hit `<Tab>` on an empty line):
+
+  ```bash
+  bind 'set bell-style none'
+  ```
+
+* If you’re using a different shell, adapt the installation path accordingly.
+
+---
+
+Happy hacking with Golem! 🚀
