@@ -83,5 +83,3 @@ No other files are touched, and the tool never modifies the original **golemsp**
 * If you’re using a different shell, adapt the installation path accordingly.
 
 ---
-
-Happy hacking with Golem! 🚀
